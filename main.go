@@ -26,7 +26,7 @@ func main() {
 	db.SetupDatabaseConnection()
 
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:           "togo-api",
+		Realm:           "flower-api",
 		Key:             []byte("secret key"),
 		Timeout:         time.Hour,
 		MaxRefresh:      5*time.Hour,
