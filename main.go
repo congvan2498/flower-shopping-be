@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 	"time"
-	api2 "togo/handler"
 	"togo/db"
+	api2 "togo/handler"
 	"togo/middleware"
 
 	jwt "github.com/appleboy/gin-jwt/v2"
@@ -23,13 +23,13 @@ func main() {
 
 	r := gin.Default()
 
-	db.SetupDatabaseConnection(false)
+	db.SetupDatabaseConnection()
 
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:           "togo-api",
 		Key:             []byte("secret key"),
 		Timeout:         time.Hour,
-		MaxRefresh:      time.Hour,
+		MaxRefresh:      5*time.Hour,
 		IdentityKey:     middleware.IdentityKey,
 		PayloadFunc:     middleware.PayloadFunc,
 		IdentityHandler: middleware.IdentityHandler,
@@ -62,6 +62,17 @@ func main() {
 		auth.POST("/task", api.CreateTask)
 		auth.GET("/task", api.GetTask)
 	}
+
+	{
+		auth.POST("/product", api.CreateProduct)
+		auth.GET("/product", api.GetProduct)
+	}
+	{
+		auth.POST("/order", api.CreateOrder)
+		auth.GET("/order", api.GetOrder)
+	}
+
+
 
 	log.Fatal(r.Run(":" + port))
 }
